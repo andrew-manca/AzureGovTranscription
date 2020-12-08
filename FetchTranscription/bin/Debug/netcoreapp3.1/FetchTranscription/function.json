@@ -1,0 +1,16 @@
+{
+  "generatedBy": "Microsoft.NET.Sdk.Functions-3.0.5",
+  "configurationSource": "attributes",
+  "bindings": [
+    {
+      "type": "serviceBusTrigger",
+      "connection": "AzureServiceBus",
+      "queueName": "fetch_transcription_queue",
+      "isSessionsEnabled": false,
+      "name": "message"
+    }
+  ],
+  "disabled": false,
+  "scriptFile": "../bin/FetchTranscription.dll",
+  "entryPoint": "FetchTranscriptionFunction.FetchTranscription.Run"
+}

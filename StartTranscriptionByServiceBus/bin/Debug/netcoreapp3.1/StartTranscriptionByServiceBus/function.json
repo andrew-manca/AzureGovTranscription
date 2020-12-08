@@ -1,0 +1,16 @@
+{
+  "generatedBy": "Microsoft.NET.Sdk.Functions-3.0.5",
+  "configurationSource": "attributes",
+  "bindings": [
+    {
+      "type": "serviceBusTrigger",
+      "connection": "AzureServiceBus",
+      "queueName": "start_transcription_queue",
+      "isSessionsEnabled": false,
+      "name": "message"
+    }
+  ],
+  "disabled": false,
+  "scriptFile": "../bin/StartTranscriptionByServiceBus.dll",
+  "entryPoint": "StartTranscription.StartTranscriptionByServiceBus.Run"
+}
