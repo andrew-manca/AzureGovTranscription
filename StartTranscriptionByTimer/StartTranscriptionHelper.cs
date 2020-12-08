@@ -38,7 +38,7 @@ namespace StartTranscriptionByTimer
 
         private readonly int FilesPerTranscriptionJob = StartTranscriptionEnvironmentVariables.FilesPerTranscriptionJob;
 
-        private readonly string HostName = $"https://{StartTranscriptionEnvironmentVariables.AzureSpeechServicesRegion}.api.cognitive.microsoft.com/";
+        private readonly string HostName = $"https://{StartTranscriptionEnvironmentVariables.AzureSpeechServicesRegion}.api.cognitive.microsoft.us/";
 
         private ILogger Logger;
 
@@ -187,21 +187,31 @@ namespace StartTranscriptionByTimer
                 var sasUrls = new List<string>();
                 var audioFileInfos = new List<AudioFileInfo>();
 
+                Logger.LogInformation("We Made It Here");
+
                 foreach (var serviceBusMessage in serviceBusMessages)
                 {
+                    Logger.LogInformation("We Made It Here Two");
                     var sasUrl = StorageConnectorInstance.CreateSas(serviceBusMessage.Data.Url);
+                    Logger.LogInformation("We Made It Here Three");
                     sasUrls.Add(sasUrl);
+                    Logger.LogInformation("We Made It Here Four");
                     audioFileInfos.Add(new AudioFileInfo(serviceBusMessage.Data.Url.AbsoluteUri, serviceBusMessage.RetryCount));
+                    Logger.LogInformation("We Made It Here Five");
                 }
 
                 ModelIdentity modelIdentity = null;
 
                 if (Guid.TryParse(StartTranscriptionEnvironmentVariables.CustomModelId, out var customModelId))
                 {
+                    Logger.LogInformation("We Made It Here Six");
                     modelIdentity = ModelIdentity.Create(StartTranscriptionEnvironmentVariables.AzureSpeechServicesRegion, customModelId);
                 }
 
+                Logger.LogInformation("We Made It Here Seven");
                 var transcriptionDefinition = TranscriptionDefinition.Create(jobName, "StartByTimerTranscription", Locale, sasUrls, properties, modelIdentity);
+
+                Logger.LogInformation("We Made It Here Eight");
 
                 var transcriptionLocation = await BatchClient.PostTranscriptionAsync(
                     transcriptionDefinition,
@@ -219,6 +229,7 @@ namespace StartTranscriptionByTimer
                     audioFileInfos,
                     0,
                     0);
+                Logger.LogInformation("We Made It Here Nine");
 
                 await ServiceBusUtilities.SendServiceBusMessageAsync(FetchQueueClientInstance, transcriptionMessage.CreateMessageString(), Logger, fetchingDelay).ConfigureAwait(false);
             }
